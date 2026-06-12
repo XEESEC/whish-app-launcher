@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Opening Microsoft 365 App</title>
+  <title>Microsoft 365 App Launcher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
@@ -125,21 +125,19 @@
       align-items: flex-start;
     }
 
-    .spinner {
+    .status-icon {
       width: 18px;
       height: 18px;
-      border: 2px solid #d2d0ce;
-      border-top-color: var(--whish-red);
       border-radius: 50%;
+      background: var(--whish-red);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
       margin-top: 2px;
-      animation: spin 0.9s linear infinite;
       flex: 0 0 auto;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
     }
 
     .status-title {
@@ -269,18 +267,18 @@
       <div class="hero">
         <div id="appIcon" class="app-icon">M</div>
         <div>
-          <h1 id="title">Opening Microsoft 365 app...</h1>
+          <h1 id="title">Opening Microsoft 365 app</h1>
           <p id="subtitle" class="subtitle">Preparing your app launch request.</p>
         </div>
       </div>
 
       <div class="content">
         <div id="statusBox" class="status">
-          <div id="spinner" class="spinner"></div>
+          <div class="status-icon">i</div>
           <div>
-            <p id="statusTitle" class="status-title">Trying to open the desktop app</p>
+            <p id="statusTitle" class="status-title">Ready to open</p>
             <p id="statusText" class="status-text">
-              Your browser may ask for permission before opening the installed desktop application.
+              Click the desktop button below. Your browser may ask for permission before opening the installed app.
             </p>
           </div>
         </div>
@@ -294,7 +292,7 @@
         <div class="help">
           <p>
             <strong>Note:</strong> Desktop app launching depends on the user’s device, installed Microsoft 365 apps,
-            browser security prompts, and Windows protocol registration.
+            browser security prompt, and Windows protocol registration.
           </p>
           <p id="appNote">
             If nothing happens, use the web version or confirm that the desktop app is installed.
@@ -318,7 +316,7 @@
         desktopLabel: "Open new email",
         webLabel: "Open Outlook web",
         subtitle: "Opening a new email compose window.",
-        note: "Outlook launches through the mailto protocol. It opens a new email compose window, not the Outlook inbox."
+        note: "Outlook uses the mailto protocol. It opens a new email compose window in the default mail app, not the Outlook inbox."
       },
 
       teams: {
@@ -379,34 +377,34 @@
       excel: {
         name: "Microsoft Excel",
         shortName: "X",
-        native: "ms-excel:ofe|u|https%3A%2F%2Fxeetekdxb.sharepoint.com%2Fsites%2Fwhish-test-employee-hub%2FShared%2520Documents%2FTemplates%2FBlank-Workbook.xlsx",
+        native: "ms-excel:ofe|u|https://xeetekdxb.sharepoint.com/sites/whish-test-employee-hub/Shared%20Documents/Templates/Blank-Workbook.xlsx",
         web: "https://www.office.com/launch/excel",
         desktopLabel: "Open Excel desktop",
         webLabel: "Open Excel web",
         subtitle: "Opening the Excel workbook in the desktop app.",
-        note: "For this test, Excel opens the SharePoint-hosted workbook. For production, this should be changed to a true .xltx template using the nft command."
+        note: "For this test, Excel opens the SharePoint-hosted workbook. For production, use a true .xltx template with the Office URI nft command."
       },
 
       powerpoint: {
         name: "Microsoft PowerPoint",
         shortName: "P",
-        native: "ms-powerpoint:ofe|u|https%3A%2F%2Fxeetekdxb.sharepoint.com%2Fsites%2Fwhish-test-employee-hub%2FShared%2520Documents%2FTemplates%2FBlank-Presentation.pptx",
+        native: "ms-powerpoint:ofe|u|https://xeetekdxb.sharepoint.com/sites/whish-test-employee-hub/Shared%20Documents/Templates/Blank-Presentation.pptx",
         web: "https://www.office.com/launch/powerpoint",
         desktopLabel: "Open PowerPoint desktop",
         webLabel: "Open PowerPoint web",
         subtitle: "Opening the PowerPoint presentation in the desktop app.",
-        note: "For this test, PowerPoint opens the SharePoint-hosted presentation. For production, this should be changed to a true .potx template using the nft command."
+        note: "For this test, PowerPoint opens the SharePoint-hosted presentation. For production, use a true .potx template with the Office URI nft command."
       },
 
       word: {
         name: "Microsoft Word",
         shortName: "W",
-        native: "ms-word:ofe|u|https%3A%2F%2Fxeetekdxb.sharepoint.com%2Fsites%2Fwhish-test-employee-hub%2FShared%2520Documents%2FTemplates%2FBlank-Document.docx",
+        native: "ms-word:ofe|u|https://xeetekdxb.sharepoint.com/sites/whish-test-employee-hub/Shared%20Documents/Templates/Blank-Document.docx",
         web: "https://www.office.com/launch/word",
         desktopLabel: "Open Word desktop",
         webLabel: "Open Word web",
         subtitle: "Opening the Word document in the desktop app.",
-        note: "For this test, Word opens the SharePoint-hosted document. For production, this should be changed to a true .dotx template using the nft command."
+        note: "For this test, Word opens the SharePoint-hosted document. For production, use a true .dotx template with the Office URI nft command."
       }
     };
 
@@ -419,7 +417,6 @@
     const appIcon = document.getElementById("appIcon");
     const statusTitle = document.getElementById("statusTitle");
     const statusText = document.getElementById("statusText");
-    const spinner = document.getElementById("spinner");
     const nativeButton = document.getElementById("nativeButton");
     const webButton = document.getElementById("webButton");
     const appNote = document.getElementById("appNote");
@@ -430,7 +427,6 @@
       subtitle.textContent = "The requested app is not available in this launcher.";
       statusTitle.textContent = "No app mapping found";
       statusText.textContent = "Check the SharePoint tile URL and confirm that the app parameter is correct.";
-      spinner.classList.add("hidden");
       nativeButton.classList.add("hidden");
       webButton.href = "https://m365.cloud.microsoft/";
       webButton.textContent = "Open Microsoft 365";
@@ -439,7 +435,7 @@
 
     function configureApp(app) {
       appIcon.textContent = app.shortName;
-      title.textContent = "Opening " + app.name;
+      title.textContent = "Open " + app.name;
       subtitle.textContent = app.subtitle;
       appNote.textContent = app.note;
 
@@ -450,28 +446,15 @@
         nativeButton.href = app.native;
         nativeButton.textContent = app.desktopLabel || ("Open " + app.name + " desktop");
 
-        statusTitle.textContent = "Trying to open the desktop app";
-        statusText.textContent = "A browser permission prompt may appear. Select Open or Allow to continue.";
-
-        setTimeout(function () {
-          window.location.href = app.native;
-        }, 450);
-
-        setTimeout(function () {
-          spinner.classList.add("hidden");
-          statusTitle.textContent = "Still here?";
-          statusText.textContent = "If the app did not open, use the desktop button again or open the web version.";
-        }, 3000);
+        statusTitle.textContent = "Ready to open desktop app";
+        statusText.textContent = "Click the desktop button below. Your browser may ask for permission to open the installed app.";
       } else {
         nativeButton.classList.add("hidden");
-        spinner.classList.add("hidden");
 
-        statusTitle.textContent = "Opening web version";
+        statusTitle.textContent = "Web version available";
         statusText.textContent = app.name + " does not have a reliable direct desktop launcher from this page.";
 
-        setTimeout(function () {
-          window.location.href = app.web;
-        }, 900);
+        webButton.textContent = app.webLabel || ("Open " + app.name);
       }
     }
 
