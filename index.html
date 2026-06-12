@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Opening Microsoft 365 app...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: #f7f7f7;
+      color: #323130;
+    }
+
+    .container {
+      max-width: 580px;
+      margin: 64px auto;
+      background: #ffffff;
+      border: 1px solid #edebe9;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    p {
+      line-height: 1.5;
+    }
+
+    .button {
+      display: inline-block;
+      margin: 8px 8px 8px 0;
+      padding: 10px 16px;
+      border-radius: 6px;
+      background: #e4003a;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .secondary {
+      background: #605e5c;
+    }
+
+    .note {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #605e5c;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 id="title">Opening app...</h1>
+    <p id="message">Your browser may ask for permission to open the desktop app.</p>
+
+    <a id="nativeButton" class="button" href="#">Open desktop app</a>
+    <a id="webButton" class="button secondary" href="#">Open web version</a>
+
+    <p class="note">
+      If nothing happens, the desktop app may not be installed, or the protocol handler may not be registered on this device.
+    </p>
+  </div>
+
+  <script>
+    const apps = {
+      outlook: {
+        name: "Outlook",
+        native: "mailto:",
+        web: "https://outlook.office.com/mail/"
+      },
+      teams: {
+        name: "Microsoft Teams",
+        native: "msteams:",
+        web: "https://teams.microsoft.com/v2/"
+      },
+      onenote: {
+        name: "OneNote",
+        native: "onenote:",
+        web: "https://www.onenote.com/notebooks"
+      },
+      excel: {
+        name: "Microsoft Excel",
+        native: "ms-excel:",
+        web: "https://www.office.com/launch/excel"
+      },
+      powerpoint: {
+        name: "Microsoft PowerPoint",
+        native: "ms-powerpoint:",
+        web: "https://www.office.com/launch/powerpoint"
+      },
+      word: {
+        name: "Microsoft Word",
+        native: "ms-word:",
+        web: "https://www.office.com/launch/word"
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const appKey = (params.get("app") || "").toLowerCase();
+    const app = apps[appKey];
+
+    const title = document.getElementById("title");
+    const message = document.getElementById("message");
+    const nativeButton = document.getElementById("nativeButton");
+    const webButton = document.getElementById("webButton");
+
+    if (!app) {
+      title.textContent = "App not configured";
+      message.textContent = "The requested app is not available in this launcher.";
+      nativeButton.style.display = "none";
+      webButton.href = "https://m365.cloud.microsoft/";
+      webButton.textContent = "Open Microsoft 365";
+    } else {
+      title.textContent = "Opening " + app.name + "...";
+
+      if (appKey === "outlook") {
+        message.textContent = "Your browser may ask for permission to open your default mail app. This opens a new email compose window.";
+        nativeButton.textContent = "Open new email";
+      } else {
+        message.textContent = "Your browser may ask for permission to open " + app.name + ".";
+        nativeButton.textContent = "Open " + app.name + " desktop";
+      }
+
+      nativeButton.href = app.native;
+      webButton.href = app.web;
+      webButton.textContent = "Open " + app.name + " web";
+
+      setTimeout(function () {
+        window.location.href = app.native;
+      }, 300);
+    }
+  </script>
+</body>
+</html>
