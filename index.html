@@ -12,7 +12,6 @@
       --text-primary: #242424;
       --text-secondary: #605e5c;
       --border: #edebe9;
-      --background: #f8f8f8;
       --card: #ffffff;
       --muted: #faf9f8;
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
@@ -138,6 +137,23 @@
       font-weight: 700;
       margin-top: 2px;
       flex: 0 0 auto;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #d2d0ce;
+      border-top-color: var(--whish-red);
+      border-radius: 50%;
+      margin-top: 2px;
+      animation: spin 0.9s linear infinite;
+      flex: 0 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .status-title {
@@ -274,11 +290,11 @@
 
       <div class="content">
         <div id="statusBox" class="status">
-          <div class="status-icon">i</div>
+          <div id="statusVisual" class="spinner"></div>
           <div>
-            <p id="statusTitle" class="status-title">Ready to open</p>
+            <p id="statusTitle" class="status-title">Trying to open desktop app</p>
             <p id="statusText" class="status-text">
-              Click the desktop button below. Your browser may ask for permission before opening the installed app.
+              Your browser may ask for permission before opening the installed app.
             </p>
           </div>
         </div>
@@ -295,7 +311,7 @@
             browser security prompt, and Windows protocol registration.
           </p>
           <p id="appNote">
-            If nothing happens, use the web version or confirm that the desktop app is installed.
+            If nothing happens, use the desktop button or open the web version.
           </p>
         </div>
       </div>
@@ -417,6 +433,7 @@
     const appIcon = document.getElementById("appIcon");
     const statusTitle = document.getElementById("statusTitle");
     const statusText = document.getElementById("statusText");
+    const statusVisual = document.getElementById("statusVisual");
     const nativeButton = document.getElementById("nativeButton");
     const webButton = document.getElementById("webButton");
     const appNote = document.getElementById("appNote");
@@ -427,15 +444,25 @@
       subtitle.textContent = "The requested app is not available in this launcher.";
       statusTitle.textContent = "No app mapping found";
       statusText.textContent = "Check the SharePoint tile URL and confirm that the app parameter is correct.";
+      statusVisual.className = "status-icon";
+      statusVisual.textContent = "!";
       nativeButton.classList.add("hidden");
       webButton.href = "https://m365.cloud.microsoft/";
       webButton.textContent = "Open Microsoft 365";
       appNote.textContent = "Valid app parameters are: outlook, teams, onedrive, planner, sharepoint, onenote, excel, powerpoint, and word.";
     }
 
+    function launchNative(app) {
+      if (!app.native) {
+        return;
+      }
+
+      window.location.href = app.native;
+    }
+
     function configureApp(app) {
       appIcon.textContent = app.shortName;
-      title.textContent = "Open " + app.name;
+      title.textContent = "Opening " + app.name;
       subtitle.textContent = app.subtitle;
       appNote.textContent = app.note;
 
@@ -446,15 +473,33 @@
         nativeButton.href = app.native;
         nativeButton.textContent = app.desktopLabel || ("Open " + app.name + " desktop");
 
-        statusTitle.textContent = "Ready to open desktop app";
-        statusText.textContent = "Click the desktop button below. Your browser may ask for permission to open the installed app.";
+        statusTitle.textContent = "Trying to open desktop app";
+        statusText.textContent = "Your browser may ask for permission. If the app does not open, use the button below.";
+
+        setTimeout(function () {
+          launchNative(app);
+        }, 500);
+
+        setTimeout(function () {
+          statusVisual.className = "status-icon";
+          statusVisual.textContent = "i";
+          statusTitle.textContent = "Still here?";
+          statusText.textContent = "If the desktop app did not open, click the desktop button below or use the web version.";
+        }, 3500);
       } else {
         nativeButton.classList.add("hidden");
 
-        statusTitle.textContent = "Web version available";
+        statusVisual.className = "status-icon";
+        statusVisual.textContent = "i";
+
+        statusTitle.textContent = "Opening web version";
         statusText.textContent = app.name + " does not have a reliable direct desktop launcher from this page.";
 
         webButton.textContent = app.webLabel || ("Open " + app.name);
+
+        setTimeout(function () {
+          window.location.href = app.web;
+        }, 900);
       }
     }
 
