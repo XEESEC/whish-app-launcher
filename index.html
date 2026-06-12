@@ -2,104 +2,411 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Opening Microsoft 365 app...</title>
+  <title>Opening Microsoft 365 App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      background: #f7f7f7;
-      color: #323130;
+    :root {
+      --whish-red: #e4003a;
+      --whish-red-dark: #b9002f;
+      --text-primary: #242424;
+      --text-secondary: #605e5c;
+      --border: #edebe9;
+      --background: #f8f8f8;
+      --card: #ffffff;
+      --muted: #faf9f8;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --radius: 18px;
     }
 
-    .container {
-      max-width: 580px;
-      margin: 64px auto;
-      background: #ffffff;
-      border: 1px solid #edebe9;
-      border-radius: 12px;
-      padding: 28px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(228, 0, 58, 0.10), transparent 34%),
+        linear-gradient(135deg, #ffffff 0%, #f8f8f8 48%, #f3f2f1 100%);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--whish-red);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 34px 34px 26px;
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 22px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .app-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: var(--whish-red);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(228, 0, 58, 0.24);
     }
 
     h1 {
-      margin-top: 0;
-      font-size: 24px;
-      font-weight: 600;
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 650;
+      letter-spacing: -0.02em;
     }
 
-    p {
+    .subtitle {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 15px;
       line-height: 1.5;
     }
 
-    .button {
-      display: inline-block;
-      margin: 8px 8px 8px 0;
-      padding: 10px 16px;
-      border-radius: 6px;
-      background: #e4003a;
-      color: #ffffff;
-      text-decoration: none;
+    .content {
+      padding: 28px 34px 34px;
+    }
+
+    .status {
+      background: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #d2d0ce;
+      border-top-color: var(--whish-red);
+      border-radius: 50%;
+      margin-top: 2px;
+      animation: spin 0.9s linear infinite;
+      flex: 0 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .status-title {
+      margin: 0 0 4px;
       font-weight: 600;
+      font-size: 14px;
+    }
+
+    .status-text {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .button {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: var(--whish-red);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(228, 0, 58, 0.22);
+    }
+
+    .primary:hover {
+      background: var(--whish-red-dark);
     }
 
     .secondary {
-      background: #605e5c;
+      background: #ffffff;
+      color: var(--text-primary);
+      border: 1px solid #d2d0ce;
     }
 
-    .note {
-      margin-top: 20px;
+    .secondary:hover {
+      background: #f3f2f1;
+    }
+
+    .help {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      color: var(--text-secondary);
       font-size: 13px;
-      color: #605e5c;
+      line-height: 1.55;
+    }
+
+    .help strong {
+      color: var(--text-primary);
+    }
+
+    .footer {
+      margin-top: 16px;
+      text-align: center;
+      color: #8a8886;
+      font-size: 12px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 18px;
+        align-items: flex-start;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 28px 24px 22px;
+      }
+
+      .content {
+        padding: 24px;
+      }
+
+      .app-icon {
+        width: 64px;
+        height: 64px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1 id="title">Opening app...</h1>
-    <p id="message">Your browser may ask for permission to open the desktop app.</p>
+  <main class="shell">
+    <div class="brand">
+      <div class="brand-mark">W</div>
+      <div>WHISH Employee Hub · Microsoft 365 Launcher</div>
+    </div>
 
-    <a id="nativeButton" class="button" href="#">Open desktop app</a>
-    <a id="webButton" class="button secondary" href="#">Open web version</a>
+    <section class="card">
+      <div class="hero">
+        <div id="appIcon" class="app-icon">M</div>
+        <div>
+          <h1 id="title">Opening Microsoft 365 app...</h1>
+          <p id="subtitle" class="subtitle">Preparing your app launch request.</p>
+        </div>
+      </div>
 
-    <p class="note">
-      If nothing happens, the desktop app may not be installed, or the protocol handler may not be registered on this device.
-    </p>
-  </div>
+      <div class="content">
+        <div id="statusBox" class="status">
+          <div id="spinner" class="spinner"></div>
+          <div>
+            <p id="statusTitle" class="status-title">Trying to open the desktop app</p>
+            <p id="statusText" class="status-text">
+              Your browser may ask for permission before opening the installed desktop application.
+            </p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a id="nativeButton" class="button primary" href="#">Open desktop app</a>
+          <a id="webButton" class="button secondary" href="#">Open web version</a>
+          <a id="hubButton" class="button secondary" href="https://xeetekdxb.sharepoint.com/sites/whish-test-employee-hub">Return to Employee Hub</a>
+        </div>
+
+        <div class="help">
+          <p>
+            <strong>Note:</strong> Desktop app launching depends on the user’s device, installed Microsoft 365 apps,
+            browser security prompts, and Windows protocol registration.
+          </p>
+          <p id="appNote">
+            If nothing happens, use the web version or confirm that the desktop app is installed.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Powered by XEETEK · Microsoft 365 app launcher
+    </div>
+  </main>
 
   <script>
     const apps = {
       outlook: {
         name: "Outlook",
+        shortName: "O",
         native: "mailto:",
-        web: "https://outlook.office.com/mail/"
+        web: "https://outlook.office.com/mail/",
+        desktopLabel: "Open new email",
+        webLabel: "Open Outlook web",
+        subtitle: "Opening a new email compose window.",
+        note: "Outlook launches through the mailto protocol. It opens a new email compose window, not the Outlook inbox."
       },
+
       teams: {
         name: "Microsoft Teams",
+        shortName: "T",
         native: "msteams:",
-        web: "https://teams.microsoft.com/v2/"
+        web: "https://teams.microsoft.com/v2/",
+        desktopLabel: "Open Teams desktop",
+        webLabel: "Open Teams web",
+        subtitle: "Opening Microsoft Teams.",
+        note: "If Teams does not open, use the web version or confirm that the Teams desktop app is installed."
       },
+
+      onedrive: {
+        name: "OneDrive",
+        shortName: "D",
+        native: "",
+        web: "https://m365.cloud.microsoft/onedrive/",
+        desktopLabel: "",
+        webLabel: "Open OneDrive",
+        subtitle: "Opening OneDrive on the web.",
+        note: "OneDrive is primarily a sync client. The most reliable launcher experience is the OneDrive web portal."
+      },
+
+      planner: {
+        name: "Planner",
+        shortName: "P",
+        native: "",
+        web: "https://planner.cloud.microsoft/",
+        desktopLabel: "",
+        webLabel: "Open Planner",
+        subtitle: "Opening Planner on the web.",
+        note: "Planner does not have a standard Windows desktop launcher. The web experience is the supported path."
+      },
+
+      sharepoint: {
+        name: "SharePoint",
+        shortName: "S",
+        native: "",
+        web: "https://xeetekdxb.sharepoint.com/sites/whish-test-employee-hub",
+        desktopLabel: "",
+        webLabel: "Open SharePoint site",
+        subtitle: "Opening the WHISH test employee hub.",
+        note: "SharePoint is web-based. There is no native SharePoint desktop application."
+      },
+
       onenote: {
         name: "OneNote",
+        shortName: "N",
         native: "onenote:",
-        web: "https://www.onenote.com/notebooks"
+        web: "https://www.onenote.com/notebooks",
+        desktopLabel: "Open OneNote desktop",
+        webLabel: "Open OneNote web",
+        subtitle: "Opening OneNote.",
+        note: "OneNote launch behavior can vary depending on the installed OneNote version and Windows protocol registration."
       },
+
       excel: {
         name: "Microsoft Excel",
-        native: "ms-excel:",
-        web: "https://www.office.com/launch/excel"
+        shortName: "X",
+        native: "ms-excel:ofe|u|https://xeetekdxb.sharepoint.com/sites/whish-test-employee-hub/Shared%20Documents/Templates/Blank-Workbook.xlsx",
+        web: "https://www.office.com/launch/excel",
+        desktopLabel: "Open Excel desktop",
+        webLabel: "Open Excel web",
+        subtitle: "Opening the Excel workbook in the desktop app.",
+        note: "For this test, Excel opens the SharePoint-hosted workbook. For production, this should be changed to a true .xltx template using the nft command."
       },
+
       powerpoint: {
         name: "Microsoft PowerPoint",
-        native: "ms-powerpoint:",
-        web: "https://www.office.com/launch/powerpoint"
+        shortName: "P",
+        native: "ms-powerpoint:ofe|u|https://xeetekdxb.sharepoint.com/sites/whish-test-employee-hub/Shared%20Documents/Templates/Blank-Presentation.pptx",
+        web: "https://www.office.com/launch/powerpoint",
+        desktopLabel: "Open PowerPoint desktop",
+        webLabel: "Open PowerPoint web",
+        subtitle: "Opening the PowerPoint presentation in the desktop app.",
+        note: "For this test, PowerPoint opens the SharePoint-hosted presentation. For production, this should be changed to a true .potx template using the nft command."
       },
+
       word: {
         name: "Microsoft Word",
-        native: "ms-word:",
-        web: "https://www.office.com/launch/word"
+        shortName: "W",
+        native: "ms-word:ofe|u|https://xeetekdxb.sharepoint.com/sites/whish-test-employee-hub/Shared%20Documents/Templates/Blank-Document.docx",
+        web: "https://www.office.com/launch/word",
+        desktopLabel: "Open Word desktop",
+        webLabel: "Open Word web",
+        subtitle: "Opening the Word document in the desktop app.",
+        note: "For this test, Word opens the SharePoint-hosted document. For production, this should be changed to a true .dotx template using the nft command."
       }
     };
 
@@ -108,34 +415,70 @@
     const app = apps[appKey];
 
     const title = document.getElementById("title");
-    const message = document.getElementById("message");
+    const subtitle = document.getElementById("subtitle");
+    const appIcon = document.getElementById("appIcon");
+    const statusTitle = document.getElementById("statusTitle");
+    const statusText = document.getElementById("statusText");
+    const spinner = document.getElementById("spinner");
     const nativeButton = document.getElementById("nativeButton");
     const webButton = document.getElementById("webButton");
+    const appNote = document.getElementById("appNote");
 
-    if (!app) {
+    function configureUnknownApp() {
+      appIcon.textContent = "?";
       title.textContent = "App not configured";
-      message.textContent = "The requested app is not available in this launcher.";
-      nativeButton.style.display = "none";
+      subtitle.textContent = "The requested app is not available in this launcher.";
+      statusTitle.textContent = "No app mapping found";
+      statusText.textContent = "Check the SharePoint tile URL and confirm that the app parameter is correct.";
+      spinner.classList.add("hidden");
+      nativeButton.classList.add("hidden");
       webButton.href = "https://m365.cloud.microsoft/";
       webButton.textContent = "Open Microsoft 365";
-    } else {
-      title.textContent = "Opening " + app.name + "...";
+      appNote.textContent = "Valid app parameters are: outlook, teams, onedrive, planner, sharepoint, onenote, excel, powerpoint, and word.";
+    }
 
-      if (appKey === "outlook") {
-        message.textContent = "Your browser may ask for permission to open your default mail app. This opens a new email compose window.";
-        nativeButton.textContent = "Open new email";
-      } else {
-        message.textContent = "Your browser may ask for permission to open " + app.name + ".";
-        nativeButton.textContent = "Open " + app.name + " desktop";
-      }
+    function configureApp(app) {
+      appIcon.textContent = app.shortName;
+      title.textContent = "Opening " + app.name;
+      subtitle.textContent = app.subtitle;
+      appNote.textContent = app.note;
 
-      nativeButton.href = app.native;
       webButton.href = app.web;
-      webButton.textContent = "Open " + app.name + " web";
+      webButton.textContent = app.webLabel || ("Open " + app.name + " web");
 
-      setTimeout(function () {
-        window.location.href = app.native;
-      }, 300);
+      if (app.native) {
+        nativeButton.href = app.native;
+        nativeButton.textContent = app.desktopLabel || ("Open " + app.name + " desktop");
+
+        statusTitle.textContent = "Trying to open the desktop app";
+        statusText.textContent = "A browser permission prompt may appear. Select Open or Allow to continue.";
+
+        setTimeout(function () {
+          window.location.href = app.native;
+        }, 450);
+
+        setTimeout(function () {
+          spinner.classList.add("hidden");
+          statusTitle.textContent = "Still here?";
+          statusText.textContent = "If the app did not open, use the desktop button again or open the web version.";
+        }, 3000);
+      } else {
+        nativeButton.classList.add("hidden");
+        spinner.classList.add("hidden");
+
+        statusTitle.textContent = "Opening web version";
+        statusText.textContent = app.name + " does not have a reliable direct desktop launcher from this page.";
+
+        setTimeout(function () {
+          window.location.href = app.web;
+        }, 900);
+      }
+    }
+
+    if (!app) {
+      configureUnknownApp();
+    } else {
+      configureApp(app);
     }
   </script>
 </body>
